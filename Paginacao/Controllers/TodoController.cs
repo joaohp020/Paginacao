@@ -6,6 +6,7 @@ using Paginacao.ViewModels;
 
 namespace Paginacao.Controllers
 {
+    //Paginação
     [ApiController]
     [Route("v1/todos")]
     public class TodoController : ControllerBase
@@ -30,9 +31,10 @@ namespace Paginacao.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAsync([FromServices] AppDbContext context, [FromQuery] int skip = 0, [FromQuery] int take = 25)
+        [HttpGet("{skip}/{take}")]
+        public async Task<IActionResult> GetAsync([FromServices] AppDbContext context, [FromRoute] int skip = 0, [FromRoute] int take = 25)
         {
+            var total = await context.Todos.CountAsync();
             var todos = await context
                 .Todos
                 .AsNoTracking()
@@ -40,7 +42,13 @@ namespace Paginacao.Controllers
                 .Take(take)
                 .ToListAsync();
             
-            return Ok(todos);
+            return Ok(new
+            {
+                total,
+                skip,
+                take,
+                data = todos
+            });
         }
 
         [HttpGet]
@@ -55,6 +63,7 @@ namespace Paginacao.Controllers
             return todo == null ? NotFound() : Ok(todo);
         }
 
+        //CRUD
         [HttpPost("todos")]
         public async Task<IActionResult> PostAsync([FromServices] AppDbContext context, [FromBody] CreateTodoViewModel model)
         {
