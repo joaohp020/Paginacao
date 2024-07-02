@@ -1,8 +1,8 @@
-# Paginacao
+# Pagination
 
-Este projeto consiste em uma API de Paginação, para lista de dados com uma grande quantidade de informações a serem carregadas.
+This project consists of a Pagination API for listing data with a large amount of information to be loaded.
 
-## Tecnologias
+## Stacks
 
 - .NET Core Web API
 - Swagger
